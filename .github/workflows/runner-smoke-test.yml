@@ -1,0 +1,28 @@
+name: Runner Smoke Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-runner:
+    name: Verify Windows Runner
+    runs-on: [self-hosted, Windows, X64, detection-lab]
+    timeout-minutes: 5
+
+    steps:
+      - name: Show runner information
+        shell: pwsh
+        run: |
+          Write-Host "Runner smoke test successful"
+          Write-Host "Computer: $env:COMPUTERNAME"
+          Write-Host "OS: $env:OS"
+          Write-Host "Workspace: $env:GITHUB_WORKSPACE"
+
+      - name: Check required tools
+        shell: pwsh
+        run: |
+          git --version
+          python --version
