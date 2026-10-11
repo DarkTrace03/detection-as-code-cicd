@@ -1,0 +1,83 @@
+
+[
+  {
+    "case": "positive_replication_right_1131f6aa",
+    "event": {
+      "EventCode": "4662",
+      "Access_Mask": "0x100",
+      "Properties_GUID": "1131f6aa-9c07-11d1-f79f-00c04fc2dcd2",
+      "Account_Name": "LAB\\user01"
+    },
+    "expected_match": true
+  },
+  {
+    "case": "positive_replication_right_1131f6ad",
+    "event": {
+      "EventCode": "4662",
+      "Access_Mask": "0x100",
+      "Properties_GUID": "1131f6ad-9c07-11d1-f79f-00c04fc2dcd2",
+      "Account_Name": "LAB\\user01"
+    },
+    "expected_match": true
+  },
+  {
+    "case": "positive_replication_right_89e95b76",
+    "event": {
+      "EventCode": "4662",
+      "Access_Mask": "0x100",
+      "Properties_GUID": "89e95b76-444d-4c62-991a-0facbeda640c",
+      "Account_Name": "LAB\\user01"
+    },
+    "expected_match": true
+  },
+  {
+    "case": "negative_unrelated_guid",
+    "event": {
+      "EventCode": "4662",
+      "Access_Mask": "0x100",
+      "Properties_GUID": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+      "Account_Name": "LAB\\user01"
+    },
+    "expected_match": false
+  },
+  {
+    "case": "negative_wrong_access_mask",
+    "event": {
+      "EventCode": "4662",
+      "Access_Mask": "0x10",
+      "Properties_GUID": "1131f6aa-9c07-11d1-f79f-00c04fc2dcd2",
+      "Account_Name": "LAB\\user01"
+    },
+    "expected_match": false
+  },
+  {
+    "case": "negative_wrong_event_id",
+    "event": {
+      "EventCode": "4624",
+      "Access_Mask": "0x100",
+      "Properties_GUID": "1131f6aa-9c07-11d1-f79f-00c04fc2dcd2",
+      "Account_Name": "LAB\\user01"
+    },
+    "expected_match": false
+  },
+  {
+    "case": "negative_machine_account",
+    "event": {
+      "EventCode": "4662",
+      "Access_Mask": "0x100",
+      "Properties_GUID": "1131f6aa-9c07-11d1-f79f-00c04fc2dcd2",
+      "Account_Name": "LAB\\DC01$"
+    },
+    "expected_match": false
+  },
+  {
+    "case": "negative_msol_account",
+    "event": {
+      "EventCode": "4662",
+      "Access_Mask": "0x100",
+      "Properties_GUID": "1131f6aa-9c07-11d1-f79f-00c04fc2dcd2",
+      "Account_Name": "MSOL_SYNC"
+    },
+    "expected_match": false
+  }
+]

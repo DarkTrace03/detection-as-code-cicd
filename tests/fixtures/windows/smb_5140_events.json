@@ -1,0 +1,53 @@
+
+[
+  {
+    "case": "positive_admin_share",
+    "description": "Truy cập ADMIN$",
+    "event": {
+      "EventCode": "5140",
+      "Share_Name": "\\\\*\\ADMIN$",
+      "Account_Name": "LAB\\user01"
+    },
+    "expected_match": true
+  },
+  {
+    "case": "positive_staging_share",
+    "description": "Truy cập SMB-Staging",
+    "event": {
+      "EventCode": "5140",
+      "Share_Name": "\\\\SERVER01\\SMB-Staging",
+      "Account_Name": "LAB\\user01"
+    },
+    "expected_match": true
+  },
+  {
+    "case": "negative_regular_share",
+    "description": "Truy cập share thông thường",
+    "event": {
+      "EventCode": "5140",
+      "Share_Name": "\\\\SERVER01\\Public",
+      "Account_Name": "LAB\\user01"
+    },
+    "expected_match": false
+  },
+  {
+    "case": "negative_machine_account",
+    "description": "Tài khoản máy bị loại bởi điều kiện NOT like(Account_Name, \"%$\")",
+    "event": {
+      "EventCode": "5140",
+      "Share_Name": "\\\\SERVER01\\ADMIN$",
+      "Account_Name": "LAB\\WORKSTATION01$"
+    },
+    "expected_match": false
+  },
+  {
+    "case": "negative_wrong_event_id",
+    "description": "Event không phải 5140",
+    "event": {
+      "EventCode": "4624",
+      "Share_Name": "\\\\SERVER01\\ADMIN$",
+      "Account_Name": "LAB\\user01"
+    },
+    "expected_match": false
+  }
+]

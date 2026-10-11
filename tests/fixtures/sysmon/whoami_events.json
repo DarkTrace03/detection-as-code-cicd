@@ -1,0 +1,43 @@
+
+[
+  {
+    "case": "positive_image_match",
+    "description": "Image kết thúc bằng whoami.exe",
+    "event": {
+      "EventCode": "1",
+      "Image": "C:\\Windows\\System32\\whoami.exe",
+      "OriginalFileName": "whoami.exe"
+    },
+    "expected_match": true
+  },
+  {
+    "case": "positive_original_filename_match",
+    "description": "OriginalFileName nhận diện whoami.exe",
+    "event": {
+      "EventCode": "1",
+      "Image": "C:\\Windows\\System32\\cmd.exe",
+      "OriginalFileName": "whoami.exe"
+    },
+    "expected_match": true
+  },
+  {
+    "case": "negative_unrelated_process",
+    "description": "Tiến trình không phải whoami.exe",
+    "event": {
+      "EventCode": "1",
+      "Image": "C:\\Windows\\System32\\notepad.exe",
+      "OriginalFileName": "notepad.exe"
+    },
+    "expected_match": false
+  },
+  {
+    "case": "negative_wrong_event_id",
+    "description": "Event ID không phải Sysmon Process Create",
+    "event": {
+      "EventCode": "22",
+      "Image": "C:\\Windows\\System32\\whoami.exe",
+      "OriginalFileName": "whoami.exe"
+    },
+    "expected_match": false
+  }
+]

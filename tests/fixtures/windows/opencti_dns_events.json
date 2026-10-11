@@ -1,0 +1,63 @@
+
+[
+  {
+    "case": "positive_matching_domain_ioc",
+    "event": {
+      "EventCode": "22",
+      "QueryName": "malicious.example.com",
+      "ioc_value": "malicious.example.com",
+      "ioc_confidence": 95
+    },
+    "expected_match": true
+  },
+  {
+    "case": "positive_case_and_trailing_dot_normalization",
+    "event": {
+      "EventCode": "22",
+      "QueryName": "MALICIOUS.EXAMPLE.COM.",
+      "ioc_value": "malicious.example.com",
+      "ioc_confidence": 80
+    },
+    "expected_match": true
+  },
+  {
+    "case": "negative_unmatched_domain",
+    "event": {
+      "EventCode": "22",
+      "QueryName": "normal.example.org",
+      "ioc_value": "malicious.example.com",
+      "ioc_confidence": 95
+    },
+    "expected_match": false
+  },
+  {
+    "case": "negative_wrong_event_id",
+    "event": {
+      "EventCode": "1",
+      "QueryName": "malicious.example.com",
+      "ioc_value": "malicious.example.com",
+      "ioc_confidence": 95
+    },
+    "expected_match": false
+  },
+  {
+    "case": "negative_empty_domain",
+    "event": {
+      "EventCode": "22",
+      "QueryName": "",
+      "ioc_value": "malicious.example.com",
+      "ioc_confidence": 95
+    },
+    "expected_match": false
+  },
+  {
+    "case": "negative_empty_ioc",
+    "event": {
+      "EventCode": "22",
+      "QueryName": "malicious.example.com",
+      "ioc_value": "",
+      "ioc_confidence": 95
+    },
+    "expected_match": false
+  }
+]

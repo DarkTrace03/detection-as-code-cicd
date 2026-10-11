@@ -1,0 +1,63 @@
+
+[
+  {
+    "case": "positive_successful_service_ticket",
+    "description": "Event 4769 thành công cho service account",
+    "event": {
+      "EventCode": "4769",
+      "Failure_Code": "0x0",
+      "Account_Name": "user01@LAB.LOCAL",
+      "Service_Name": "MSSQLSvc/sql01.lab.local",
+      "Ticket_Encryption_Type": "0x17"
+    },
+    "expected_match": true
+  },
+  {
+    "case": "negative_krbtgt_service",
+    "description": "Loại service krbtgt",
+    "event": {
+      "EventCode": "4769",
+      "Failure_Code": "0x0",
+      "Account_Name": "user01@LAB.LOCAL",
+      "Service_Name": "krbtgt",
+      "Ticket_Encryption_Type": "0x17"
+    },
+    "expected_match": false
+  },
+  {
+    "case": "negative_machine_service_account",
+    "description": "Loại service account có tên kết thúc bằng dấu $",
+    "event": {
+      "EventCode": "4769",
+      "Failure_Code": "0x0",
+      "Account_Name": "user01@LAB.LOCAL",
+      "Service_Name": "SQL01$",
+      "Ticket_Encryption_Type": "0x17"
+    },
+    "expected_match": false
+  },
+  {
+    "case": "negative_failed_ticket",
+    "description": "Ticket bị lỗi",
+    "event": {
+      "EventCode": "4769",
+      "Failure_Code": "0x12",
+      "Account_Name": "user01@LAB.LOCAL",
+      "Service_Name": "MSSQLSvc/sql01.lab.local",
+      "Ticket_Encryption_Type": "0x17"
+    },
+    "expected_match": false
+  },
+  {
+    "case": "negative_wrong_event_id",
+    "description": "Event không phải 4769",
+    "event": {
+      "EventCode": "4624",
+      "Failure_Code": "0x0",
+      "Account_Name": "user01@LAB.LOCAL",
+      "Service_Name": "MSSQLSvc/sql01.lab.local",
+      "Ticket_Encryption_Type": "0x17"
+    },
+    "expected_match": false
+  }
+]
