@@ -1,0 +1,21 @@
+index=* EventCode=22
+| eval query=lower(rtrim(QueryName,"."))
+| join type=inner query [
+    search index=opencti_data sourcetype="opencti:indicator" type="domain-name"
+    | eval query=lower(rtrim(value,"."))
+    | stats
+        max(confidence) as ioc_confidence
+        max(score) as ioc_score
+        values(name) as ioc_name
+        values(value) as ioc_value
+        values(created_by) as ioc_source
+        values(description) as ioc_description
+        by query
+]
+| eval detection_name="OpenCTI IOC - DNS Query"
+| eval severity=case(
+    ioc_confidence>=90,"high",
+    ioc_confidence>=70,"medium",
+    true(),"low"
+)
+| table _time host User Image ProcessId ProcessGuid QueryName QueryResults ioc_name ioc_source ioc_confidence ioc_score detection_name severity

@@ -1,0 +1,10 @@
+sourcetype="WinEventLog:Security" EventCode=5140
+| where like(Share_Name,"%ADMIN$%")
+    OR like(Share_Name,"%C$%")
+    OR like(Share_Name,"%D$%")
+    OR like(Share_Name,"%IPC$%")
+    OR like(Share_Name,"%SMB-Staging%")
+| where NOT like(Account_Name,"%$")
+| table _time host Account_Name Account_Domain Source_Address Share_Name
+| sort - _time
+| eval alert_id = md5(host + _time + sourcetype)

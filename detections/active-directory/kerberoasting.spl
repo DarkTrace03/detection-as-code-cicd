@@ -1,0 +1,6 @@
+index=main EventCode=4769 Failure_Code=0x0
+| where NOT match(Account_Name, "\$@")
+| where Service_Name!="krbtgt"
+| where NOT match(Service_Name, "\$$")
+| table _time host Account_Name Client_Address Client_Port Service_Name Ticket_Encryption_Type Ticket_Options Failure_Code
+| sort - _time

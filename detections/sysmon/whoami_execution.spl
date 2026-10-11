@@ -1,0 +1,6 @@
+index=* sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1
+(
+    Image="*\\whoami.exe"
+    OR OriginalFileName="whoami.exe"
+)
+| table _time host User Image OriginalFileName CommandLine ParentImage ParentCommandLine ProcessId
