@@ -47,6 +47,8 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r requirements-dev.txt
           sigma plugin install splunk
+          sigma plugin install sysmon
+          sigma list pipelines splunk
 
       - name: Validate Sigma metadata and MITRE tags
         run: python scripts/validate_rules.py
