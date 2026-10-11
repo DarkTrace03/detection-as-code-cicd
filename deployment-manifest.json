@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "environment": "splunk-lab",
+  "namespace": {
+    "app": "search",
+    "owner": "deploy_svc"
+  },
+  "deployments": [
+    {
+      "id": "test-whoami",
+      "source": "detections/sysmon/whoami_execution.spl",
+      "saved_search_name": "CI_CD_Test_Whoami_Execution",
+      "enabled": true,
+      "schedule_enabled": false,
+      "alert_actions_enabled": false,
+      "description": "CI/CD deployment validation for the Sysmon whoami detection"
+    }
+  ]
+}
