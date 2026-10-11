@@ -158,3 +158,27 @@ jobs:
           path: dist/*.spl
           if-no-files-found: error
           retention-days: 14
+
+
+  deploy-splunk-lab:
+    name: Deploy test Saved Search to Splunk
+    needs: validate-and-convert
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: [self-hosted, Windows, X64, detection-lab]
+    timeout-minutes: 5
+    environment: splunk-lab
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout trusted main branch
+        uses: actions/checkout@v4
+
+      - name: Deploy and verify test Saved Search
+        shell: cmd
+        env:
+          SPLUNK_URL: ${{ secrets.SPLUNK_URL }}
+          SPLUNK_USERNAME: ${{ secrets.SPLUNK_USERNAME }}
+          SPLUNK_PASSWORD: ${{ secrets.SPLUNK_PASSWORD }}
+        run: python scripts\deploy_splunk_saved_search.py
