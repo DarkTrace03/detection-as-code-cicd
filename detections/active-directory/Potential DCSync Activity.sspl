@@ -1,0 +1,5 @@
+index=* EventCode=4662 Access_Mask=0x100 
+(Properties_GUID="*1131f6aa-9c07-11d1-f79f-00c04fc2dcd2*" OR Properties_GUID="*1131f6ad-9c07-11d1-f79f-00c04fc2dcd2*" OR Properties_GUID="*89e95b76-444d-4c62-991a-0facbeda640c*") 
+| rex field=AitName "CN=(?<target_account>[^,]+)" 
+| search NOT (Account_Name="*\$" OR Account_Name="MSOL_*")
+| table _time, dest, Account_Name, Properties_GUID, Operation_Type, src_ip

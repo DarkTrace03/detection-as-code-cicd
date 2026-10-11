@@ -1,0 +1,72 @@
+name: Detection-as-Code CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "rules/**"
+      - "tests/**"
+      - "scripts/**"
+      - "requirements-dev.txt"
+      - ".github/workflows/detection-ci.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "rules/**"
+      - "tests/**"
+      - "scripts/**"
+      - "requirements-dev.txt"
+      - ".github/workflows/detection-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-and-convert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-dev.txt
+          sigma plugin install splunk
+
+      - name: Validate Sigma metadata and MITRE tags
+        run: python scripts/validate_rules.py
+
+      - name: Run fixture tests
+        run: pytest -q
+
+      - name: Convert Sigma rules to Splunk SPL
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          count=0
+          while IFS= read -r -d '' rule; do
+            name="$(basename "${rule%.*}")"
+            sigma convert -t splunk -p sysmon "$rule" > "dist/${name}.spl"
+            test -s "dist/${name}.spl"
+            echo "Converted: $rule -> dist/${name}.spl"
+            count=$((count + 1))
+          done < <(find rules -type f \( -name '*.yml' -o -name '*.yaml' \) -print0)
+          test "$count" -gt 0
+
+      - name: Upload generated SPL
+        uses: actions/upload-artifact@v4
+        with:
+          name: splunk-spl
+          path: dist/*.spl
+          if-no-files-found: error
+          retention-days: 14

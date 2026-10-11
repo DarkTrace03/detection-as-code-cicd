@@ -1,0 +1,34 @@
+title: Suspicious PowerShell Encoded Command
+id: 5d5fbabc-02f7-4a9d-97c9-7c8bcd6dfe01
+status: experimental
+description: Detects PowerShell process creation using common encoded-command switches. Validate field mapping and false positives in the target environment.
+references:
+  - https://attack.mitre.org/techniques/T1059/001/
+author: Detection-as-Code Lab
+date: 2026-10-11
+tags:
+  - attack.execution
+  - attack.t1059.001
+logsource:
+  product: windows
+  category: process_creation
+  service: sysmon
+detection:
+  selection_image:
+    Image|endswith:
+      - '\powershell.exe'
+      - '\pwsh.exe'
+  selection_encoded:
+    CommandLine|contains:
+      - ' -enc '
+      - ' -encodedcommand '
+      - ' -e '
+  condition: selection_image and selection_encoded
+falsepositives:
+  - Authorized administration scripts using encoded PowerShell commands
+level: medium
+fields:
+  - Image
+  - CommandLine
+  - ParentImage
+  - User

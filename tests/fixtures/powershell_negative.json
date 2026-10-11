@@ -1,0 +1,6 @@
+{
+  "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+  "CommandLine": "powershell.exe -NoProfile -File C:\\Scripts\\inventory.ps1",
+  "ParentImage": "C:\\Windows\\System32\\services.exe",
+  "User": "LAB\\svc_inventory"
+}
