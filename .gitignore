@@ -7,3 +7,6 @@ __pycache__/
 !.env.example
 *.spl
 dist/
+
+# Runtime deployment backups: keep out of Git
+backups/
