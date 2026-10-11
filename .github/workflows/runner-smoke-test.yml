@@ -14,15 +14,15 @@ jobs:
 
     steps:
       - name: Show runner information
-        shell: powershell
+        shell: cmd
         run: |
-          Write-Host "Runner smoke test successful"
-          Write-Host "Computer: $env:COMPUTERNAME"
-          Write-Host "OS: $env:OS"
-          Write-Host "Workspace: $env:GITHUB_WORKSPACE"
+          echo Runner smoke test successful
+          echo Computer: %COMPUTERNAME%
+          echo OS: %OS%
+          echo Workspace: %GITHUB_WORKSPACE%
 
       - name: Check required tools
-        shell: powershell
+        shell: cmd
         run: |
           git --version
           python --version
