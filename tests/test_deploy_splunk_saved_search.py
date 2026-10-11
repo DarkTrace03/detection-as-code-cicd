@@ -3,10 +3,24 @@ import unittest
 from unittest.mock import Mock
 from urllib.parse import unquote_plus
 
-from scripts.deploy_splunk_saved_search import (
-    DeploymentError,
-    rollback_saved_search,
+import importlib.util
+from pathlib import Path
+
+SCRIPT_PATH = (
+    Path(__file__).resolve().parents[1]
+    / "scripts"
+    / "deploy_splunk_saved_search.py"
 )
+
+SPEC = importlib.util.spec_from_file_location(
+    "deploy_splunk_saved_search",
+    SCRIPT_PATH,
+)
+deploy = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(deploy)
+
+DeploymentError = deploy.DeploymentError
+rollback_saved_search = deploy.rollback_saved_search
 
 
 class TestRollbackLogic(unittest.TestCase):
