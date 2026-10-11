@@ -7,6 +7,7 @@ on:
       - "rules/**"
       - "tests/**"
       - "scripts/**"
+      - "detections/**"
       - "requirements-dev.txt"
       - ".github/workflows/detection-ci.yml"
 
@@ -16,6 +17,7 @@ on:
       - "rules/**"
       - "tests/**"
       - "scripts/**"
+      - "detections/**"
       - "requirements-dev.txt"
       - ".github/workflows/detection-ci.yml"
 
@@ -68,14 +70,15 @@ jobs:
               out.write("## Detection-as-Code Test Summary\n\n")
 
               if not report.exists():
-                  out.write(
-                      "Test report was not generated. "
-                      "Check the installation and test logs.\n"
-                  )
+                  out.write("Test report was not generated. Check the test logs.\n")
                   raise SystemExit(0)
 
               root = ET.parse(report).getroot()
-              suites = [root] if root.tag == "testsuite" else list(root.iter("testsuite"))
+              suites = (
+                  [root]
+                  if root.tag == "testsuite"
+                  else list(root.iter("testsuite"))
+              )
 
               total = sum(int(s.get("tests", 0)) for s in suites)
               failures = sum(int(s.get("failures", 0)) for s in suites)
@@ -99,6 +102,26 @@ jobs:
                   out.write("**Result: PASSED**\n")
           PY
 
+      - name: Validate Sigma rules exist
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          count=0
+          while IFS= read -r -d '' rule; do
+            echo "Found Sigma rule: $rule"
+            count=$((count + 1))
+          done < <(
+            find rules -type f \( -name '*.yml' -o -name '*.yaml' \) -print0
+          )
+
+          if [ "$count" -eq 0 ]; then
+            echo "::error::No Sigma YAML rules found in rules/"
+            exit 1
+          fi
+
+          echo "Found $count Sigma rule(s)."
+
       - name: Convert Sigma rules to Splunk SPL
         shell: bash
         run: |
@@ -120,7 +143,7 @@ jobs:
           )
 
           if [ "$count" -eq 0 ]; then
-            echo "::error::No Sigma YAML rules found in rules/"
+            echo "::error::No Sigma rules were converted."
             exit 1
           fi
 
